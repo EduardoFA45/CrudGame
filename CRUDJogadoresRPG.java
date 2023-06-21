@@ -7,48 +7,51 @@ class Jogador {
     private String nome;
     private String classe;
     private String habilidades;
-    
+
     public Jogador(int id, String nome, String classe, String habilidades) {
         this.id = id;
         this.nome = nome;
         this.classe = classe;
         this.habilidades = habilidades;
     }
-    
+
     public int getId() {
         return id;
     }
-    
+
     public String getNome() {
         return nome;
     }
-    
+
     public String getClasse() {
         return classe;
     }
-    
+
     public String getHabilidades() {
         return habilidades;
     }
 
-    public void setClasse(String novaClasse) {
-    }
-
     public void setNome(String novoNome) {
+        this.nome = novoNome;
     }
 
     public void setHabilidades(String novasHabilidades) {
+        this.habilidades = novasHabilidades;
+    }
+
+    public void setClasse(String novaClasse) {
+        this.classe = novaClasse;
     }
 }
 
 public class CRUDJogadoresRPG {
     private static List<Jogador> jogadores = new ArrayList<>();
-    private static int proximoId = 1; 
-    
+    private static int proximoId = 1;
+    private static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         int opcao = 0;
-        
+
         do {
             System.out.println("Selecione uma opção:");
             System.out.println("1 - Adicionar jogador");
@@ -56,20 +59,20 @@ public class CRUDJogadoresRPG {
             System.out.println("3 - Atualizar jogador");
             System.out.println("4 - Remover jogador");
             System.out.println("5 - Sair");
-            opcao = scanner.nextInt();
-            
+            opcao = lerOpcao();
+
             switch (opcao) {
                 case 1:
-                    adicionarJogador(scanner);
+                    adicionarJogador();
                     break;
                 case 2:
                     listarJogadores();
                     break;
                 case 3:
-                    atualizarJogador(scanner);
+                    atualizarJogador();
                     break;
                 case 4:
-                    removerJogador(scanner);
+                    removerJogador();
                     break;
                 case 5:
                     System.out.println("Saindo...");
@@ -79,27 +82,33 @@ public class CRUDJogadoresRPG {
                     break;
             }
         } while (opcao != 5);
-        
+
         scanner.close();
     }
-    
-    private static void adicionarJogador(Scanner scanner) {
+
+    private static int lerOpcao() {
+        int opcao = scanner.nextInt();
+        scanner.nextLine();
+        return opcao;
+    }
+
+    private static void adicionarJogador() {
         System.out.println("Digite o nome do jogador:");
-        String nome = scanner.next();
-        
+        String nome = lerInformacao();
+
         System.out.println("Digite a classe do jogador:");
-        String classe = scanner.next();
-        
+        String classe = lerInformacao();
+
         System.out.println("Digite as habilidades do jogador:");
-        String habilidades = scanner.next();
-        
+        String habilidades = lerInformacao();
+
         Jogador jogador = new Jogador(proximoId, nome, classe, habilidades);
         jogadores.add(jogador);
         proximoId++;
-        
+
         System.out.println("Jogador adicionado com sucesso!");
     }
-    
+
     private static void listarJogadores() {
         if (jogadores.isEmpty()) {
             System.out.println("Não há jogadores cadastrados.");
@@ -114,58 +123,63 @@ public class CRUDJogadoresRPG {
             }
         }
     }
-    
-    private static void atualizarJogador(Scanner scanner) {
+
+    private static void atualizarJogador() {
         System.out.println("Digite o ID do jogador que deseja atualizar:");
-        int id = scanner.nextInt();
-        
+        int id = lerOpcao();
+
         Jogador jogadorAtualizar = null;
-        
+
         for (Jogador jogador : jogadores) {
             if (jogador.getId() == id) {
                 jogadorAtualizar = jogador;
                 break;
             }
         }
-        
+
         if (jogadorAtualizar == null) {
             System.out.println("Jogador não encontrado.");
         } else {
             System.out.println("Digite o novo nome do jogador:");
-            String novoNome = scanner.next();
-            
+            String novoNome = lerInformacao();
+
             System.out.println("Digite a nova classe do jogador:");
-            String novaClasse = scanner.next();
-            
+            String novaClasse = lerInformacao();
+
             System.out.println("Digite as novas habilidades do jogador:");
-            String novasHabilidades = scanner.next();
-            
+            String novasHabilidades = lerInformacao();
+
             jogadorAtualizar.setNome(novoNome);
             jogadorAtualizar.setClasse(novaClasse);
             jogadorAtualizar.setHabilidades(novasHabilidades);
-            
+
             System.out.println("Jogador atualizado com sucesso!");
         }
     }
-    
-    private static void removerJogador(Scanner scanner) {
+
+    private static void removerJogador() {
         System.out.println("Digite o ID do jogador que deseja remover:");
-        int id = scanner.nextInt();
-        
+        int id = lerOpcao();
+
         Jogador jogadorRemover = null;
-        
+
         for (Jogador jogador : jogadores) {
             if (jogador.getId() == id) {
                 jogadorRemover = jogador;
                 break;
             }
         }
-        
+
         if (jogadorRemover == null) {
             System.out.println("Jogador não encontrado.");
         } else {
             jogadores.remove(jogadorRemover);
             System.out.println("Jogador removido com sucesso!");
         }
+    }
+
+    private static String lerInformacao() {
+        String informacao = scanner.nextLine();
+        return informacao;
     }
 }
